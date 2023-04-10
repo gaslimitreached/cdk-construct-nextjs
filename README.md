@@ -19,20 +19,20 @@ This library provides constructs for hosting [Next.JS](https://nextjs.org/) web 
 
 Supports versions: 12 and 13
 
+## Install
+
+```bash
+npm install cdk-construct-nextjs
+```
+
 ## Usage
 
 ```ts
-import { Nextjs } from 'gaslimitreached/cdk-construct-nextjs';
+import { Nextjs } from 'cdk-construct-nextjs';
 
 new Nextjs(this, 'handler', {
   path: '../apps/website',
 });
-```
-
-## Install
-
-```bash
-npm install cdk-construct-nextjs`
 ```
 
 ## Acknowledgements
