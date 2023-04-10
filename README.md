@@ -19,18 +19,26 @@ This library provides constructs for hosting [Next.JS](https://nextjs.org/) web 
 
 Supports versions: 12 and 13
 
+## Usage
+
 ```ts
-import { Nextjs } from '@gaslimitreached/cdk-construct-nextjs';
+import { Nextjs } from 'gaslimitreached/cdk-construct-nextjs';
 
 new Nextjs(this, 'handler', {
   path: '../apps/website',
 });
 ```
 
+## Install
+
+```bash
+npm install gaslimitreached/cdk-construct-nextjs`
+```
+
 ## Acknowledgements
 
 These constructs were inspired by or directly modified from many sources, primarily:
 
-https://github.com/serverless-stack/sst/blob/master/packages/sst/src/constructs/NextjsSite.ts
-https://serverless-nextjs.com/docs/cdkconstruct/
-https://github.com/rayova/cdk-serverless-nextjs
+- https://github.com/serverless-stack/sst/blob/master/packages/sst/src/constructs/NextjsSite.ts
+- https://serverless-nextjs.com/docs/cdkconstruct/
+- https://github.com/rayova/cdk-serverless-nextjs
