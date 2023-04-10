@@ -1,0 +1,44 @@
+{
+  "name": "aws-mono",
+  "version": "0.0.0",
+  "private": true,
+  "workspaces": {
+    "nohoist": [
+      "**/example/",
+      "**/example/**"
+    ],
+    "packages": [
+      "apps/*",
+      "packages/*"
+    ]
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "clean": "turbo run clean",
+    "deploy": "turbo run deploy",
+    "destroy": "turbo run destroy",
+    "dev": "turbo run dev",
+    "opennext": "turbo run opennext",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "synth": "turbo run synth"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.13",
+    "eslint-config-custom": "*",
+    "postcss": "^8.4.21",
+    "prettier": "^2.8.4",
+    "prettier-plugin-tailwindcss": "^0.2.3",
+    "tailwindcss": "^3.2.7",
+    "turbo": "^1.8.2"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "dependencies": {
+    "next": "^13.2.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "packageManager": "yarn@1.22.19"
+}
