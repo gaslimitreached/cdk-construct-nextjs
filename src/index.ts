@@ -247,7 +247,7 @@ export class NextJs extends Construct {
 
   protected createImageHandler() {
     return new CdkFunction(this, 'ImageOptimizationFunction', {
-      runtime: Runtime.NODEJS_14_X,
+      runtime: Runtime.NODEJS_18_X,
       currentVersionOptions: {
         removalPolicy: RemovalPolicy.DESTROY,
       },
