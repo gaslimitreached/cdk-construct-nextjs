@@ -7,7 +7,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   jsiiVersion: '~5.0.0',
   name: 'cdk-construct-nextjs',
   projenrcTs: true,
-  repositoryUrl: 'https://github.com/me/cdk-construct-nextjs.git',
+  repositoryUrl: 'https://github.com/gaslimitreached/cdk-construct-nextjs.git',
 
   // deps: [],                /* Runtime dependencies of this module. */
   // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */

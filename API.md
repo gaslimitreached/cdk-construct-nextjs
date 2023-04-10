@@ -2,37 +2,37 @@
 
 ## Constructs <a name="Constructs" id="Constructs"></a>
 
-### Nextjs <a name="Nextjs" id="cdk-construct-nextjs.Nextjs"></a>
+### NextJs <a name="NextJs" id="cdk-construct-nextjs.NextJs"></a>
 
-#### Initializers <a name="Initializers" id="cdk-construct-nextjs.Nextjs.Initializer"></a>
+#### Initializers <a name="Initializers" id="cdk-construct-nextjs.NextJs.Initializer"></a>
 
 ```typescript
-import { Nextjs } from 'cdk-construct-nextjs'
+import { NextJs } from 'cdk-construct-nextjs'
 
-new Nextjs(scope: Construct, id: string, props: IProps)
+new NextJs(scope: Construct, id: string, props: IProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-construct-nextjs.Nextjs.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#cdk-construct-nextjs.Nextjs.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-construct-nextjs.Nextjs.Initializer.parameter.props">props</a></code> | <code><a href="#cdk-construct-nextjs.IProps">IProps</a></code> | *No description.* |
+| <code><a href="#cdk-construct-nextjs.NextJs.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#cdk-construct-nextjs.NextJs.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#cdk-construct-nextjs.NextJs.Initializer.parameter.props">props</a></code> | <code><a href="#cdk-construct-nextjs.IProps">IProps</a></code> | *No description.* |
 
 ---
 
-##### `scope`<sup>Required</sup> <a name="scope" id="cdk-construct-nextjs.Nextjs.Initializer.parameter.scope"></a>
+##### `scope`<sup>Required</sup> <a name="scope" id="cdk-construct-nextjs.NextJs.Initializer.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
 ---
 
-##### `id`<sup>Required</sup> <a name="id" id="cdk-construct-nextjs.Nextjs.Initializer.parameter.id"></a>
+##### `id`<sup>Required</sup> <a name="id" id="cdk-construct-nextjs.NextJs.Initializer.parameter.id"></a>
 
 - *Type:* string
 
 ---
 
-##### `props`<sup>Required</sup> <a name="props" id="cdk-construct-nextjs.Nextjs.Initializer.parameter.props"></a>
+##### `props`<sup>Required</sup> <a name="props" id="cdk-construct-nextjs.NextJs.Initializer.parameter.props"></a>
 
 - *Type:* <a href="#cdk-construct-nextjs.IProps">IProps</a>
 
@@ -42,11 +42,11 @@ new Nextjs(scope: Construct, id: string, props: IProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#cdk-construct-nextjs.Nextjs.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#cdk-construct-nextjs.NextJs.toString">toString</a></code> | Returns a string representation of this construct. |
 
 ---
 
-##### `toString` <a name="toString" id="cdk-construct-nextjs.Nextjs.toString"></a>
+##### `toString` <a name="toString" id="cdk-construct-nextjs.NextJs.toString"></a>
 
 ```typescript
 public toString(): string
@@ -58,21 +58,21 @@ Returns a string representation of this construct.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#cdk-construct-nextjs.Nextjs.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#cdk-construct-nextjs.NextJs.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="cdk-construct-nextjs.Nextjs.isConstruct"></a>
+##### ~~`isConstruct`~~ <a name="isConstruct" id="cdk-construct-nextjs.NextJs.isConstruct"></a>
 
 ```typescript
-import { Nextjs } from 'cdk-construct-nextjs'
+import { NextJs } from 'cdk-construct-nextjs'
 
-Nextjs.isConstruct(x: any)
+NextJs.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
 
-###### `x`<sup>Required</sup> <a name="x" id="cdk-construct-nextjs.Nextjs.isConstruct.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="cdk-construct-nextjs.NextJs.isConstruct.parameter.x"></a>
 
 - *Type:* any
 
@@ -84,17 +84,17 @@ Any object.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-construct-nextjs.Nextjs.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#cdk-construct-nextjs.Nextjs.property.assets">assets</a></code> | <code>aws-cdk-lib.aws_s3.Bucket</code> | *No description.* |
-| <code><a href="#cdk-construct-nextjs.Nextjs.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.Distribution</code> | *No description.* |
-| <code><a href="#cdk-construct-nextjs.Nextjs.property.imageHandler">imageHandler</a></code> | <code>aws-cdk-lib.aws_lambda.Function</code> | *No description.* |
-| <code><a href="#cdk-construct-nextjs.Nextjs.property.origin">origin</a></code> | <code>aws-cdk-lib.aws_cloudfront.IOrigin</code> | *No description.* |
-| <code><a href="#cdk-construct-nextjs.Nextjs.property.serverBehavior">serverBehavior</a></code> | <code>aws-cdk-lib.aws_cloudfront.BehaviorOptions</code> | *No description.* |
-| <code><a href="#cdk-construct-nextjs.Nextjs.property.serverHandler">serverHandler</a></code> | <code>aws-cdk-lib.aws_lambda.Function \| aws-cdk-lib.aws_cloudfront.experimental.EdgeFunction</code> | *No description.* |
+| <code><a href="#cdk-construct-nextjs.NextJs.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#cdk-construct-nextjs.NextJs.property.assets">assets</a></code> | <code>aws-cdk-lib.aws_s3.Bucket</code> | *No description.* |
+| <code><a href="#cdk-construct-nextjs.NextJs.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.Distribution</code> | *No description.* |
+| <code><a href="#cdk-construct-nextjs.NextJs.property.imageHandler">imageHandler</a></code> | <code>aws-cdk-lib.aws_lambda.Function</code> | *No description.* |
+| <code><a href="#cdk-construct-nextjs.NextJs.property.origin">origin</a></code> | <code>aws-cdk-lib.aws_cloudfront.IOrigin</code> | *No description.* |
+| <code><a href="#cdk-construct-nextjs.NextJs.property.serverBehavior">serverBehavior</a></code> | <code>aws-cdk-lib.aws_cloudfront.BehaviorOptions</code> | *No description.* |
+| <code><a href="#cdk-construct-nextjs.NextJs.property.serverHandler">serverHandler</a></code> | <code>aws-cdk-lib.aws_lambda.Function \| aws-cdk-lib.aws_cloudfront.experimental.EdgeFunction</code> | *No description.* |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="cdk-construct-nextjs.Nextjs.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="cdk-construct-nextjs.NextJs.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -106,7 +106,7 @@ The tree node.
 
 ---
 
-##### `assets`<sup>Required</sup> <a name="assets" id="cdk-construct-nextjs.Nextjs.property.assets"></a>
+##### `assets`<sup>Required</sup> <a name="assets" id="cdk-construct-nextjs.NextJs.property.assets"></a>
 
 ```typescript
 public readonly assets: Bucket;
@@ -116,7 +116,7 @@ public readonly assets: Bucket;
 
 ---
 
-##### `distribution`<sup>Required</sup> <a name="distribution" id="cdk-construct-nextjs.Nextjs.property.distribution"></a>
+##### `distribution`<sup>Required</sup> <a name="distribution" id="cdk-construct-nextjs.NextJs.property.distribution"></a>
 
 ```typescript
 public readonly distribution: Distribution;
@@ -126,7 +126,7 @@ public readonly distribution: Distribution;
 
 ---
 
-##### `imageHandler`<sup>Required</sup> <a name="imageHandler" id="cdk-construct-nextjs.Nextjs.property.imageHandler"></a>
+##### `imageHandler`<sup>Required</sup> <a name="imageHandler" id="cdk-construct-nextjs.NextJs.property.imageHandler"></a>
 
 ```typescript
 public readonly imageHandler: Function;
@@ -136,7 +136,7 @@ public readonly imageHandler: Function;
 
 ---
 
-##### `origin`<sup>Required</sup> <a name="origin" id="cdk-construct-nextjs.Nextjs.property.origin"></a>
+##### `origin`<sup>Required</sup> <a name="origin" id="cdk-construct-nextjs.NextJs.property.origin"></a>
 
 ```typescript
 public readonly origin: IOrigin;
@@ -146,7 +146,7 @@ public readonly origin: IOrigin;
 
 ---
 
-##### `serverBehavior`<sup>Required</sup> <a name="serverBehavior" id="cdk-construct-nextjs.Nextjs.property.serverBehavior"></a>
+##### `serverBehavior`<sup>Required</sup> <a name="serverBehavior" id="cdk-construct-nextjs.NextJs.property.serverBehavior"></a>
 
 ```typescript
 public readonly serverBehavior: BehaviorOptions;
@@ -156,7 +156,7 @@ public readonly serverBehavior: BehaviorOptions;
 
 ---
 
-##### `serverHandler`<sup>Required</sup> <a name="serverHandler" id="cdk-construct-nextjs.Nextjs.property.serverHandler"></a>
+##### `serverHandler`<sup>Required</sup> <a name="serverHandler" id="cdk-construct-nextjs.NextJs.property.serverHandler"></a>
 
 ```typescript
 public readonly serverHandler: Function | EdgeFunction;
