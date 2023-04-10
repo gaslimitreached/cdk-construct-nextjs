@@ -40,7 +40,7 @@ export class NextJs extends Construct {
       edge: props.edge ?? false,
     };
 
-    this.buildPath = join(__dirname, props.path, '.open-next');
+    this.buildPath = join(props.path, '.open-next');
     this.staticAssetsPath = join(this.buildPath, 'assets');
     this.hashedAssetsPath = join(this.staticAssetsPath, '_next');
     this.serverFunctionPath = join(this.buildPath, 'server-function');
