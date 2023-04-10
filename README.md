@@ -32,7 +32,7 @@ new Nextjs(this, 'handler', {
 ## Install
 
 ```bash
-npm install gaslimitreached/cdk-construct-nextjs`
+npm install cdk-construct-nextjs`
 ```
 
 ## Acknowledgements
