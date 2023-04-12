@@ -91,6 +91,8 @@ Any object.
 | <code><a href="#cdk-construct-nextjs.NextJs.property.origin">origin</a></code> | <code>aws-cdk-lib.aws_cloudfront.IOrigin</code> | *No description.* |
 | <code><a href="#cdk-construct-nextjs.NextJs.property.serverBehavior">serverBehavior</a></code> | <code>aws-cdk-lib.aws_cloudfront.BehaviorOptions</code> | *No description.* |
 | <code><a href="#cdk-construct-nextjs.NextJs.property.serverHandler">serverHandler</a></code> | <code>aws-cdk-lib.aws_lambda.Function \| aws-cdk-lib.aws_cloudfront.experimental.EdgeFunction</code> | *No description.* |
+| <code><a href="#cdk-construct-nextjs.NextJs.property.certificate">certificate</a></code> | <code>aws-cdk-lib.aws_certificatemanager.ICertificate</code> | *No description.* |
+| <code><a href="#cdk-construct-nextjs.NextJs.property.hostedZone">hostedZone</a></code> | <code>aws-cdk-lib.aws_route53.IHostedZone</code> | *No description.* |
 
 ---
 
@@ -166,7 +168,111 @@ public readonly serverHandler: Function | EdgeFunction;
 
 ---
 
+##### `certificate`<sup>Optional</sup> <a name="certificate" id="cdk-construct-nextjs.NextJs.property.certificate"></a>
 
+```typescript
+public readonly certificate: ICertificate;
+```
+
+- *Type:* aws-cdk-lib.aws_certificatemanager.ICertificate
+
+---
+
+##### `hostedZone`<sup>Optional</sup> <a name="hostedZone" id="cdk-construct-nextjs.NextJs.property.hostedZone"></a>
+
+```typescript
+public readonly hostedZone: IHostedZone;
+```
+
+- *Type:* aws-cdk-lib.aws_route53.IHostedZone
+
+---
+
+
+## Structs <a name="Structs" id="Structs"></a>
+
+### DomainNameProps <a name="DomainNameProps" id="cdk-construct-nextjs.DomainNameProps"></a>
+
+#### Initializer <a name="Initializer" id="cdk-construct-nextjs.DomainNameProps.Initializer"></a>
+
+```typescript
+import { DomainNameProps } from 'cdk-construct-nextjs'
+
+const domainNameProps: DomainNameProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cdk-construct-nextjs.DomainNameProps.property.domainName">domainName</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#cdk-construct-nextjs.DomainNameProps.property.hostedZone">hostedZone</a></code> | <code>string \| aws-cdk-lib.aws_route53.IHostedZone</code> | *No description.* |
+| <code><a href="#cdk-construct-nextjs.DomainNameProps.property.alternateNames">alternateNames</a></code> | <code>string[]</code> | *No description.* |
+| <code><a href="#cdk-construct-nextjs.DomainNameProps.property.certificate">certificate</a></code> | <code>aws-cdk-lib.aws_certificatemanager.ICertificate</code> | *No description.* |
+| <code><a href="#cdk-construct-nextjs.DomainNameProps.property.domainAlias">domainAlias</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#cdk-construct-nextjs.DomainNameProps.property.external">external</a></code> | <code>boolean</code> | *No description.* |
+
+---
+
+##### `domainName`<sup>Required</sup> <a name="domainName" id="cdk-construct-nextjs.DomainNameProps.property.domainName"></a>
+
+```typescript
+public readonly domainName: string;
+```
+
+- *Type:* string
+
+---
+
+##### `hostedZone`<sup>Required</sup> <a name="hostedZone" id="cdk-construct-nextjs.DomainNameProps.property.hostedZone"></a>
+
+```typescript
+public readonly hostedZone: string | IHostedZone;
+```
+
+- *Type:* string | aws-cdk-lib.aws_route53.IHostedZone
+
+---
+
+##### `alternateNames`<sup>Optional</sup> <a name="alternateNames" id="cdk-construct-nextjs.DomainNameProps.property.alternateNames"></a>
+
+```typescript
+public readonly alternateNames: string[];
+```
+
+- *Type:* string[]
+
+---
+
+##### `certificate`<sup>Optional</sup> <a name="certificate" id="cdk-construct-nextjs.DomainNameProps.property.certificate"></a>
+
+```typescript
+public readonly certificate: ICertificate;
+```
+
+- *Type:* aws-cdk-lib.aws_certificatemanager.ICertificate
+
+---
+
+##### `domainAlias`<sup>Optional</sup> <a name="domainAlias" id="cdk-construct-nextjs.DomainNameProps.property.domainAlias"></a>
+
+```typescript
+public readonly domainAlias: string;
+```
+
+- *Type:* string
+
+---
+
+##### `external`<sup>Optional</sup> <a name="external" id="cdk-construct-nextjs.DomainNameProps.property.external"></a>
+
+```typescript
+public readonly external: boolean;
+```
+
+- *Type:* boolean
+
+---
 
 
 ## Protocols <a name="Protocols" id="Protocols"></a>
@@ -183,6 +289,8 @@ public readonly serverHandler: Function | EdgeFunction;
 | <code><a href="#cdk-construct-nextjs.IProps.property.path">path</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#cdk-construct-nextjs.IProps.property.edge">edge</a></code> | <code>boolean</code> | *No description.* |
 | <code><a href="#cdk-construct-nextjs.IProps.property.role">role</a></code> | <code>aws-cdk-lib.aws_iam.Role</code> | *No description.* |
+| <code><a href="#cdk-construct-nextjs.IProps.property.certificate">certificate</a></code> | <code>aws-cdk-lib.aws_certificatemanager.ICertificate</code> | *No description.* |
+| <code><a href="#cdk-construct-nextjs.IProps.property.domainName">domainName</a></code> | <code>string \| <a href="#cdk-construct-nextjs.DomainNameProps">DomainNameProps</a></code> | *No description.* |
 
 ---
 
@@ -213,6 +321,26 @@ public readonly role: Role;
 ```
 
 - *Type:* aws-cdk-lib.aws_iam.Role
+
+---
+
+##### `certificate`<sup>Optional</sup> <a name="certificate" id="cdk-construct-nextjs.IProps.property.certificate"></a>
+
+```typescript
+public readonly certificate: ICertificate;
+```
+
+- *Type:* aws-cdk-lib.aws_certificatemanager.ICertificate
+
+---
+
+##### `domainName`<sup>Optional</sup> <a name="domainName" id="cdk-construct-nextjs.IProps.property.domainName"></a>
+
+```typescript
+public readonly domainName: string | DomainNameProps;
+```
+
+- *Type:* string | <a href="#cdk-construct-nextjs.DomainNameProps">DomainNameProps</a>
 
 ---
 

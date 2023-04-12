@@ -28,10 +28,37 @@ npm install cdk-construct-nextjs
 ## Usage
 
 ```ts
-import { Nextjs } from 'cdk-construct-nextjs';
+import { NextJs } from 'cdk-construct-nextjs';
 
-new Nextjs(this, 'handler', {
+new NextJs(this, 'handler', {
   path: '../apps/website',
+});
+```
+
+### Domain names
+
+This construct assumes that the provided `domainName` is the same as the `hostedZoneId`.
+
+```ts
+import { NextJs } from 'cdk-construct-nextjs';
+
+new NextJs(this, 'handler', {
+  path: '../apps/website',
+  domainName: 'example.com',
+});
+```
+
+Existing hosted zones can be provided as an object.
+
+```ts
+import { NextJs } from 'cdk-construct-nextjs';
+
+new NextJs(this, 'handler', {
+  path: '../apps/website',
+  domainName: {
+    domainName: 'example.com',
+    hostedZone: 'existing.com',
+  }
 });
 ```
 
