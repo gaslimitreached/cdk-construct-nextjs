@@ -655,14 +655,6 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
-"@jsii/check-node@1.79.0":
-  version "1.79.0"
-  resolved "https://registry.yarnpkg.com/@jsii/check-node/-/check-node-1.79.0.tgz#802fb9db739a805dffd87acc44c3f534c554ad6d"
-  integrity sha512-CQk5RtaFqbWAWcV35ciVqdLT7NnPPjYeRPnlD3KY7bkYhvYC7z2kcmRpTycGBRk7NS7Plr3l+4i02gjCzr59eA==
-  dependencies:
-    chalk "^4.1.2"
-    semver "^7.3.8"
-
 "@jsii/check-node@1.80.0":
   version "1.80.0"
   resolved "https://registry.yarnpkg.com/@jsii/check-node/-/check-node-1.80.0.tgz#73602eee7625b93b9bd9d39840748a9aa77377ec"
@@ -4043,12 +4035,12 @@ jsii@1.80.0:
     yargs "^16.2.0"
 
 jsii@~5.0.0:
-  version "5.0.3"
-  resolved "https://registry.yarnpkg.com/jsii/-/jsii-5.0.3.tgz#d295468577a3c6731aa7a7c81af07dc701e65f5f"
-  integrity sha512-2JydAAF+yzoHW0bZiDwBDhYPwGQRegxaCuWc9CCze2hT3RvvpagLkQ+QCxmRxSyiU8dOTJMYdETl13RTSFUxkg==
+  version "5.0.4"
+  resolved "https://registry.yarnpkg.com/jsii/-/jsii-5.0.4.tgz#e79816b2f05d1b5c0c77fe53307cc35a837393f7"
+  integrity sha512-vMgIeLUf32ARZUut1tMTtfy/CpvEMPmnikZw/vbTt0IoeZqkH83z3voPCMicvzUnDtc3rNDFjU2yQeGapmROlw==
   dependencies:
-    "@jsii/check-node" "1.79.0"
-    "@jsii/spec" "^1.79.0"
+    "@jsii/check-node" "1.80.0"
+    "@jsii/spec" "^1.80.0"
     case "^1.6.3"
     chalk "^4"
     downlevel-dts "^0.11.0"
@@ -4058,7 +4050,7 @@ jsii@~5.0.0:
     semver-intersect "^1.4.0"
     sort-json "^2.0.1"
     spdx-license-list "^6.6.0"
-    typescript "~5.0.3"
+    typescript "~5.0.4"
     yargs "^17.7.1"
 
 json-buffer@3.0.1:
@@ -6106,7 +6098,7 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==
 
-typescript@^5.0.4, typescript@~5.0.3:
+typescript@^5.0.4, typescript@~5.0.4:
   version "5.0.4"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.0.4.tgz#b217fd20119bd61a94d4011274e0ab369058da3b"
   integrity sha512-cW9T5W9xY37cc+jfEnaUvX91foxtHkza3Nw3wkoF4sSlKn0MONdkdEndig/qPBWXNkmplh3NzayQzCiHM4/hqw==
