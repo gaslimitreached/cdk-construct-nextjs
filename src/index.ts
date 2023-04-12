@@ -2,19 +2,34 @@ import { existsSync } from 'fs';
 import { join } from 'path';
 
 import { Duration, Fn, RemovalPolicy } from 'aws-cdk-lib';
+import { Certificate, CertificateValidation, ICertificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { AllowedMethods, BehaviorOptions, CacheCookieBehavior, CacheHeaderBehavior, CachePolicy, CacheQueryStringBehavior, CachedMethods, Distribution, IOrigin, LambdaEdgeEventType, OriginRequestCookieBehavior, OriginRequestHeaderBehavior, OriginRequestPolicy, OriginRequestQueryStringBehavior, ViewerProtocolPolicy, experimental } from 'aws-cdk-lib/aws-cloudfront';
 import { HttpOrigin, OriginGroup, S3Origin } from 'aws-cdk-lib/aws-cloudfront-origins';
 import { IRole, PolicyStatement, Role } from 'aws-cdk-lib/aws-iam';
 import { Function as CdkFunction, Runtime, Code, Architecture, FunctionUrlAuthType, Alias } from 'aws-cdk-lib/aws-lambda';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
+import { ARecord, AaaaRecord, HostedZone, IHostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53';
+import { HttpsRedirect } from 'aws-cdk-lib/aws-route53-patterns';
+import { CloudFrontTarget } from 'aws-cdk-lib/aws-route53-targets';
 import { Bucket } from 'aws-cdk-lib/aws-s3';
 import { BucketDeployment, CacheControl, Source } from 'aws-cdk-lib/aws-s3-deployment';
 import { Construct } from 'constructs';
 
+export interface DomainNameProps {
+  readonly alternateNames?: string[];
+  readonly certificate?: ICertificate;
+  readonly domainName: string;
+  readonly domainAlias?: string;
+  readonly external?: boolean;
+  readonly hostedZone: IHostedZone | string;
+}
+
 export interface IProps {
-  path: string;
-  edge?: boolean;
-  role?: Role;
+  readonly path: string;
+  readonly edge?: boolean;
+  readonly role?: Role;
+  domainName?: string | DomainNameProps;
+  certificate?: ICertificate;
 }
 
 export class NextJs extends Construct {
@@ -25,6 +40,8 @@ export class NextJs extends Construct {
   public readonly serverHandler: CdkFunction | experimental.EdgeFunction;
   public readonly serverBehavior: BehaviorOptions;
   public readonly distribution: Distribution;
+  public readonly hostedZone?: IHostedZone;
+  public readonly certificate?: ICertificate;
 
   private buildPath: string;
   private staticAssetsPath: string;
@@ -40,6 +57,9 @@ export class NextJs extends Construct {
       edge: props.edge ?? false,
     };
 
+    if (props.certificate) this.props.certificate = props.certificate;
+    if (props.domainName) this.props.domainName = props.domainName;
+
     this.buildPath = join(props.path, '.open-next');
     this.staticAssetsPath = join(this.buildPath, 'assets');
     this.hashedAssetsPath = join(this.staticAssetsPath, '_next');
@@ -53,9 +73,14 @@ export class NextJs extends Construct {
       autoDeleteObjects: true,
     });
 
+    this.hostedZone = this.lookupHostedZone();
+
+    this.certificate = this.createCertificate();
+
     this.origin = new S3Origin(this.assets);
 
     this.imageHandler = this.createImageHandler();
+
     this.assets.grantReadWrite(new Alias(this, 'ImageHandlerAlias', {
       aliasName: 'live',
       version: this.imageHandler.currentVersion,
@@ -69,11 +94,16 @@ export class NextJs extends Construct {
       aliasName: 'live',
       version: this.serverHandler.currentVersion,
     }));
+
     this.assets.grantRead(this.serverHandler!.role!);
 
     this.serverBehavior = this.createServerBehavior();
+
     this.distribution = this.createDistribution();
+
     this.createBucketDeployment();
+
+    this.createRoute53Records();
   }
 
   protected verifyBuildOutput() {
@@ -190,6 +220,8 @@ export class NextJs extends Construct {
 
     // https://github.com/serverless-stack/open-next#cloudfront-distribution
     return new Distribution(this, 'HostingDistribution', {
+      domainNames: this.buildDomainNames(),
+      certificate: this.certificate,
       defaultRootObject: '',
       defaultBehavior: {
         cachePolicy: this.serverBehavior.cachePolicy,
@@ -265,5 +297,93 @@ export class NextJs extends Construct {
         resources: [this.assets.arnForObjects('*')],
       })],
     });
+  }
+
+  protected buildDomainNames(): string[] {
+    const { domainName } = this.props;
+
+    if (!domainName) return [];
+
+    if (typeof domainName === 'string') return [domainName];
+
+    if (domainName.alternateNames && !this.props.certificate) {
+      throw new Error('Certificate must be provided when using alternate names.');
+    }
+
+    const alternates = domainName?.alternateNames ?? [];
+
+    return [domainName.domainName, ...alternates];
+  }
+
+  protected lookupHostedZone(): IHostedZone | undefined {
+    const { domainName } = this.props;
+
+    if (!domainName) return;
+
+    if (typeof domainName == 'string') {
+      return HostedZone.fromLookup(this, 'HostedZone', {
+        domainName,
+      });
+    } else if (domainName.hostedZone && typeof domainName.hostedZone == 'string') {
+      return HostedZone.fromLookup(this, 'HostedZone', {
+        domainName: domainName.hostedZone,
+      });
+    } else {
+      if (domainName.external) return;
+      return domainName.hostedZone as IHostedZone;
+    }
+  }
+
+  private createCertificate(): ICertificate | undefined {
+    const { domainName } = this.props;
+
+    if (!domainName) return;
+
+    if (typeof domainName == 'string') {
+      return new Certificate(this, 'Certificate', {
+        domainName,
+        validation: CertificateValidation.fromDns(this.hostedZone),
+      });
+    }
+
+    // No hosted zones for external certificates
+    if (!this.hostedZone) return this.props.certificate;
+
+    return new Certificate(this, 'Certificate', {
+      domainName: (this.props.domainName as DomainNameProps).domainName,
+      validation: CertificateValidation.fromDns(this.hostedZone),
+    });
+  }
+
+  protected createRoute53Records(): void {
+    const { domainName } = this.props;
+
+    if (!domainName|| !this.hostedZone) return;
+
+    let recordName, domainAlias;
+
+    if (typeof domainName === 'string') {
+      recordName = domainName;
+    } else {
+      recordName = domainName.domainName;
+      domainAlias = domainName.domainAlias;
+    }
+
+    const record = {
+      recordName,
+      zone: this.hostedZone,
+      target: RecordTarget.fromAlias(new CloudFrontTarget(this.distribution)),
+    };
+
+    new ARecord(this, 'AliasRecord', record);
+    new AaaaRecord(this, 'AliasRecordAAAA', record);
+
+    if (domainAlias) {
+      new HttpsRedirect(this, 'Redirect', {
+        zone: this.hostedZone,
+        recordNames: [domainAlias],
+        targetDomain: recordName,
+      });
+    }
   }
 }
