@@ -2,7 +2,7 @@ import { awscdk } from 'projen';
 const project = new awscdk.AwsCdkConstructLibrary({
   author: 'Cache Monet',
   authorAddress: 'none@yobusiness.com',
-  cdkVersion: '2.73.0',
+  cdkVersion: '2.87.0',
   defaultReleaseBranch: 'main',
   jsiiVersion: '~5.0.0',
   name: 'cdk-construct-nextjs',
