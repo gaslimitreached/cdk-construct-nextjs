@@ -1,18 +1,68 @@
 import { existsSync } from 'fs';
 import { join } from 'path';
 
-import { Duration, Fn, RemovalPolicy } from 'aws-cdk-lib';
-import { Certificate, CertificateValidation, ICertificate } from 'aws-cdk-lib/aws-certificatemanager';
-import { AllowedMethods, BehaviorOptions, CacheCookieBehavior, CacheHeaderBehavior, CachePolicy, CacheQueryStringBehavior, CachedMethods, Distribution, IOrigin, LambdaEdgeEventType, OriginRequestCookieBehavior, OriginRequestHeaderBehavior, OriginRequestPolicy, OriginRequestQueryStringBehavior, ViewerProtocolPolicy, experimental } from 'aws-cdk-lib/aws-cloudfront';
-import { HttpOrigin, OriginGroup, S3Origin } from 'aws-cdk-lib/aws-cloudfront-origins';
+import { Duration, Fn, RemovalPolicy, Stack } from 'aws-cdk-lib';
+import {
+  Certificate,
+  CertificateValidation,
+  ICertificate,
+} from 'aws-cdk-lib/aws-certificatemanager';
+import {
+  AllowedMethods,
+  BehaviorOptions,
+  CacheCookieBehavior,
+  CacheHeaderBehavior,
+  CachePolicy,
+  CacheQueryStringBehavior,
+  CachedMethods,
+  Distribution,
+  Function as CloudFunction,
+  FunctionCode,
+  IOrigin,
+  LambdaEdgeEventType,
+  OriginRequestCookieBehavior,
+  OriginRequestHeaderBehavior,
+  OriginRequestPolicy,
+  OriginRequestQueryStringBehavior,
+  ViewerProtocolPolicy,
+  experimental,
+  FunctionEventType,
+} from 'aws-cdk-lib/aws-cloudfront';
+import {
+  HttpOrigin,
+  OriginGroup,
+  S3Origin,
+} from 'aws-cdk-lib/aws-cloudfront-origins';
+import { Rule, Schedule } from 'aws-cdk-lib/aws-events';
+import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
 import { IRole, PolicyStatement, Role } from 'aws-cdk-lib/aws-iam';
-import { Function as CdkFunction, Runtime, Code, Architecture, FunctionUrlAuthType, Alias } from 'aws-cdk-lib/aws-lambda';
+import {
+  Function as CdkFunction,
+  Runtime,
+  Code,
+  Architecture,
+  FunctionUrlAuthType,
+  Alias,
+} from 'aws-cdk-lib/aws-lambda';
+import { SqsEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
-import { ARecord, AaaaRecord, HostedZone, IHostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53';
+import {
+  ARecord,
+  AaaaRecord,
+  HostedZone,
+  IHostedZone,
+  RecordTarget,
+} from 'aws-cdk-lib/aws-route53';
 import { HttpsRedirect } from 'aws-cdk-lib/aws-route53-patterns';
 import { CloudFrontTarget } from 'aws-cdk-lib/aws-route53-targets';
 import { Bucket } from 'aws-cdk-lib/aws-s3';
-import { BucketDeployment, CacheControl, Source } from 'aws-cdk-lib/aws-s3-deployment';
+import {
+  BucketDeployment,
+  CacheControl,
+  Source,
+} from 'aws-cdk-lib/aws-s3-deployment';
+import { Queue } from 'aws-cdk-lib/aws-sqs';
+
 import { Construct } from 'constructs';
 
 export interface DomainNameProps {
@@ -28,6 +78,7 @@ export interface IProps {
   readonly path: string;
   readonly edge?: boolean;
   readonly role?: Role;
+  readonly warm?: Number;
   domainName?: string | DomainNameProps;
   certificate?: ICertificate;
 }
@@ -38,6 +89,7 @@ export class NextJs extends Construct {
   public readonly assets: Bucket;
   public readonly imageHandler: CdkFunction;
   public readonly serverHandler: CdkFunction | experimental.EdgeFunction;
+  public readonly cloudFrontFunction: CloudFunction;
   public readonly serverBehavior: BehaviorOptions;
   public readonly distribution: Distribution;
   public readonly hostedZone?: IHostedZone;
@@ -48,6 +100,8 @@ export class NextJs extends Construct {
   private hashedAssetsPath: string;
   private serverFunctionPath: string;
   private imageOptimizationFunctionPath: string;
+  private revalidationFunctionPath: string;
+  private warmerFunctionPath: string;
 
   constructor(scope: Construct, id: string, props: IProps) {
     super(scope, id);
@@ -65,6 +119,8 @@ export class NextJs extends Construct {
     this.hashedAssetsPath = join(this.staticAssetsPath, '_next');
     this.serverFunctionPath = join(this.buildPath, 'server-function');
     this.imageOptimizationFunctionPath = join(this.buildPath, 'image-optimization-function');
+    this.revalidationFunctionPath = join(this.buildPath, 'revalidation-function');
+    this.warmerFunctionPath = join(this.buildPath, 'warmer-function');
 
     this.verifyBuildOutput();
 
@@ -99,7 +155,11 @@ export class NextJs extends Construct {
 
     this.serverBehavior = this.createServerBehavior();
 
+    this.cloudFrontFunction = this.createCloudFrontFunction();
+
     this.distribution = this.createDistribution();
+
+    this.createWarmerFunction();
 
     this.createBucketDeployment();
 
@@ -163,6 +223,7 @@ export class NextJs extends Construct {
         // provide config to edge lambda function
         // https://github.com/jetbridge/cdk-nextjs/blob/main/src/NextjsDistribution.ts
         customHeaders: { 'x-origin-url': functionUrl.url },
+        readTimeout: Duration.seconds(30),
       }),
       allowedMethods: AllowedMethods.ALLOW_ALL,
       cachedMethods: CachedMethods.CACHE_GET_HEAD_OPTIONS,
@@ -232,6 +293,10 @@ export class NextJs extends Construct {
           fallbackOrigin: this.origin,
         }),
         viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+        functionAssociations: [{
+          eventType: FunctionEventType.VIEWER_REQUEST,
+          function: this.cloudFrontFunction,
+        }],
       },
       // https://github.com/serverless-stack/open-next#running-at-edge
       additionalBehaviors: {
@@ -249,6 +314,11 @@ export class NextJs extends Construct {
 
   protected createServerHandler(role: IRole | undefined) {
     return new CdkFunction(this, 'ServerFunction', {
+      environment: {
+        CACHE_BUCKET_NAME: this.assets.bucketName,
+        CACHE_BUCKET_PREFIX: '_cache',
+        CACHE_BUCKET_REGION: Stack.of(this).region,
+      },
       runtime: Runtime.NODEJS_18_X,
       timeout: Duration.seconds(10),
       currentVersionOptions: {
@@ -277,6 +347,74 @@ export class NextJs extends Construct {
     });
   }
 
+  // TODO: use template literal to inject function code as props
+  protected createCloudFrontFunction() {
+    return new CloudFunction(this, 'CloudFrontFunction', {
+      code: FunctionCode.fromInline(`
+      function handler (event) {
+        var request = event.request;
+        if (request.headers.host)
+          request.headers['x-forwarded-host'] = request.headers.host;
+        return request;
+      }`),
+    });
+  }
+
+  protected createRevalidationHandler() {
+    if (!this.serverHandler) return;
+
+    const queue = new Queue(this, 'RevalidationQueue', {
+      fifo: true,
+      receiveMessageWaitTime: Duration.seconds(20),
+    });
+
+    const consumer = new CdkFunction(this, 'RevalidationConsumer', {
+      description: 'Nextjs revalidation queue consumer',
+      handler: 'index.handler',
+      code: Code.fromAsset(this.revalidationFunctionPath),
+      runtime: Runtime.NODEJS_18_X,
+      timeout: Duration.seconds(30),
+    });
+
+    consumer.addEventSource(new SqsEventSource(queue, { batchSize: 5 }));
+
+    const server = this.serverHandler as CdkFunction;
+
+    server.addEnvironment('REVALIDATION_QUEUE_URL', queue.queueUrl);
+    server.addEnvironment('REVALIDATION_QUEUE_REGION', Stack.of(this).region);
+
+    queue.grantSendMessages(this.serverHandler.role!);
+  }
+
+  private createWarmerFunction() {
+    const { warm, edge } = this.props;
+    if (!warm) return;
+
+    if (warm && edge) throw new Error('warming not supported on edge');
+
+    if (!this.serverHandler) return;
+
+    const warmer = new CdkFunction(this, 'WarmerFunction', {
+      description: 'Server handler warmer',
+      code: Code.fromAsset(this.warmerFunctionPath),
+      runtime: Runtime.NODEJS_18_X,
+      handler: 'index.handler',
+      timeout: Duration.minutes(15),
+      memorySize: 1024,
+      environment: {
+        FUNCTION_NAME: this.serverHandler.functionName,
+        CONCURRENCY: warm.toString(),
+      },
+    });
+
+    this.serverHandler.grantInvoke(warmer);
+
+    new Rule(this, 'WarmerScheduler', {
+      schedule: Schedule.rate(Duration.minutes(10)),
+      targets: [new LambdaFunction(warmer, { retryAttempts: 0 })],
+    });
+  }
+
   protected createImageHandler() {
     return new CdkFunction(this, 'ImageOptimizationFunction', {
       runtime: Runtime.NODEJS_18_X,
@@ -287,6 +425,7 @@ export class NextJs extends Construct {
       code: Code.fromAsset(this.imageOptimizationFunctionPath),
       environment: {
         BUCKET_NAME: this.assets.bucketName,
+        BUCKET_PREFIX: '_assets',
       },
       logRetention: RetentionDays.THREE_DAYS,
       memorySize: 1536,
