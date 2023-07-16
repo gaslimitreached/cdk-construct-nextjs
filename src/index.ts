@@ -97,6 +97,7 @@ export class NextJs extends Construct {
 
   private buildPath: string;
   private staticAssetsPath: string;
+  private cachedAssetsPath: string;
   private hashedAssetsPath: string;
   private serverFunctionPath: string;
   private imageOptimizationFunctionPath: string;
@@ -116,6 +117,7 @@ export class NextJs extends Construct {
 
     this.buildPath = join(props.path, '.open-next');
     this.staticAssetsPath = join(this.buildPath, 'assets');
+    this.cachedAssetsPath = join(this.buildPath, 'cache');
     this.hashedAssetsPath = join(this.staticAssetsPath, '_next');
     this.serverFunctionPath = join(this.buildPath, 'server-function');
     this.imageOptimizationFunctionPath = join(this.buildPath, 'image-optimization-function');
@@ -188,6 +190,13 @@ export class NextJs extends Construct {
       destinationBucket: this.assets,
       distribution: this.distribution,
       sources: [Source.asset(this.staticAssetsPath, { exclude: [this.hashedAssetsPath] })],
+    });
+
+    // Cached assets deployment
+    new BucketDeployment(this, 'CachedAssetsDeployment', {
+      destinationBucket: this.assets,
+      distribution: this.distribution,
+      sources: [Source.asset(this.cachedAssetsPath)],
     });
   }
 
@@ -316,7 +325,6 @@ export class NextJs extends Construct {
     return new CdkFunction(this, 'ServerFunction', {
       environment: {
         CACHE_BUCKET_NAME: this.assets.bucketName,
-        CACHE_BUCKET_PREFIX: '_cache',
         CACHE_BUCKET_REGION: Stack.of(this).region,
       },
       runtime: Runtime.NODEJS_18_X,
@@ -425,7 +433,6 @@ export class NextJs extends Construct {
       code: Code.fromAsset(this.imageOptimizationFunctionPath),
       environment: {
         BUCKET_NAME: this.assets.bucketName,
-        BUCKET_PREFIX: '_assets',
       },
       logRetention: RetentionDays.THREE_DAYS,
       memorySize: 1536,

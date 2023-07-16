@@ -8,25 +8,20 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lilnt",
-    "opennext:debug": "OPEN_NEXT_DEBUG=true npx -y open-next@latest build",
-    "opennext": "npx -y open-next@latest build",
-    "postopennext:debug": "cp -r node_modules .open-next/server-function",
-    "postopennext": "cp -r node_modules .open-next/server-function"
+    "build:debug": "OPEN_NEXT_DEBUG=true npx -y open-next@2.0.4 build",
+    "build:next": "npx -y open-next@2.0.4 build"
   },
   "dependencies": {
+    "@next/font": "13.4.7",
     "date-fns": "^2.23.0",
-    "eslint": "latest",
     "gray-matter": "^4.0.3",
-    "next": "^13.1.1",
-    "open-next": "^0.8.2",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "next": "13.4.7",
+    "next-auth": "^4.22.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
     "remark": "^13.0.0",
     "remark-html": "^13.0.2",
-    "sharp": "^0.31.3",
+    "sharp": "^0.32.3",
     "swr": "^1.0.1"
-  },
-  "devDependencies": {
-    "open-next": "^0.8.2"
   }
 }

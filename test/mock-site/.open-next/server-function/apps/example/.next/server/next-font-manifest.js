@@ -1,1 +1,1 @@
-self.__NEXT_FONT_MANIFEST={pages:{},app:{},appUsingSizeAdjust:!1,pagesUsingSizeAdjust:!1};
+self.__NEXT_FONT_MANIFEST='{"pages":{"/font-next-font":["static/media/bb8008dbe8e0717a-s.p.woff2"]},"app":{"/Users/dev/Documents/github.com/hollanddd/altrac-aws/node_modules/@next/font/google/target.css?{\\"path\\":\\"pages/font-next-font.js\\",\\"import\\":\\"MuseoModerno\\",\\"arguments\\":[{\\"subsets\\":[\\"latin\\"],\\"weight\\":\\"400\\"}],\\"variableName\\":\\"museo\\"}":["static/media/bb8008dbe8e0717a-s.p.woff2"]},"appUsingSizeAdjust":true,"pagesUsingSizeAdjust":true}';
