@@ -158,6 +158,7 @@ Any object.
 | --- | --- | --- |
 | <code><a href="#cdk-construct-nextjs.NextJs.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#cdk-construct-nextjs.NextJs.property.assets">assets</a></code> | <code>aws-cdk-lib.aws_s3.Bucket</code> | *No description.* |
+| <code><a href="#cdk-construct-nextjs.NextJs.property.cloudFrontFunction">cloudFrontFunction</a></code> | <code>aws-cdk-lib.aws_cloudfront.Function</code> | *No description.* |
 | <code><a href="#cdk-construct-nextjs.NextJs.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.Distribution</code> | *No description.* |
 | <code><a href="#cdk-construct-nextjs.NextJs.property.imageHandler">imageHandler</a></code> | <code>aws-cdk-lib.aws_lambda.Function</code> | *No description.* |
 | <code><a href="#cdk-construct-nextjs.NextJs.property.origin">origin</a></code> | <code>aws-cdk-lib.aws_cloudfront.IOrigin</code> | *No description.* |
@@ -187,6 +188,16 @@ public readonly assets: Bucket;
 ```
 
 - *Type:* aws-cdk-lib.aws_s3.Bucket
+
+---
+
+##### `cloudFrontFunction`<sup>Required</sup> <a name="cloudFrontFunction" id="cdk-construct-nextjs.NextJs.property.cloudFrontFunction"></a>
+
+```typescript
+public readonly cloudFrontFunction: Function;
+```
+
+- *Type:* aws-cdk-lib.aws_cloudfront.Function
 
 ---
 
@@ -361,6 +372,7 @@ public readonly external: boolean;
 | <code><a href="#cdk-construct-nextjs.IProps.property.path">path</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#cdk-construct-nextjs.IProps.property.edge">edge</a></code> | <code>boolean</code> | *No description.* |
 | <code><a href="#cdk-construct-nextjs.IProps.property.role">role</a></code> | <code>aws-cdk-lib.aws_iam.Role</code> | *No description.* |
+| <code><a href="#cdk-construct-nextjs.IProps.property.warm">warm</a></code> | <code>number</code> | *No description.* |
 | <code><a href="#cdk-construct-nextjs.IProps.property.certificate">certificate</a></code> | <code>aws-cdk-lib.aws_certificatemanager.ICertificate</code> | *No description.* |
 | <code><a href="#cdk-construct-nextjs.IProps.property.domainName">domainName</a></code> | <code>string \| <a href="#cdk-construct-nextjs.DomainNameProps">DomainNameProps</a></code> | *No description.* |
 
@@ -393,6 +405,16 @@ public readonly role: Role;
 ```
 
 - *Type:* aws-cdk-lib.aws_iam.Role
+
+---
+
+##### `warm`<sup>Optional</sup> <a name="warm" id="cdk-construct-nextjs.IProps.property.warm"></a>
+
+```typescript
+public readonly warm: number;
+```
+
+- *Type:* number
 
 ---
 
