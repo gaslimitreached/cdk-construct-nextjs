@@ -5,47 +5,30 @@ exports.id = 820;
 exports.ids = [820];
 exports.modules = {
 
-/***/ 3903:
-/***/ ((__unused_webpack_module, exports) => {
-
-var __webpack_unused_export__;
-
-__webpack_unused_export__ = ({
-    value: true
-});
-Object.defineProperty(exports, "Z", ({
-    enumerable: true,
-    get: function() {
-        return _interopRequireDefault;
-    }
-}));
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-
-
-/***/ }),
-
-/***/ 1360:
+/***/ 3499:
 /***/ ((module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({
     value: true
 }));
-exports["default"] = void 0;
-var _interop_require_default = (__webpack_require__(3903)/* ["default"] */ .Z);
-var _react = _interop_require_default(__webpack_require__(6689));
-var _head = _interop_require_default(__webpack_require__(501));
+Object.defineProperty(exports, "default", ({
+    enumerable: true,
+    get: function() {
+        return Error;
+    }
+}));
+const _interop_require_default = __webpack_require__(167);
+const _react = /*#__PURE__*/ _interop_require_default._(__webpack_require__(6689));
+const _head = /*#__PURE__*/ _interop_require_default._(__webpack_require__(2636));
 const statusCodes = {
     400: "Bad Request",
     404: "This page could not be found",
     405: "Method Not Allowed",
     500: "Internal Server Error"
 };
-function _getInitialProps({ res , err  }) {
+function _getInitialProps(param) {
+    let { res, err } = param;
     const statusCode = res && res.statusCode ? res.statusCode : err ? err.statusCode : 404;
     return {
         statusCode
@@ -63,8 +46,7 @@ const styles = {
         justifyContent: "center"
     },
     desc: {
-        display: "inline-block",
-        textAlign: "left"
+        lineHeight: "48px"
     },
     h1: {
         display: "inline-block",
@@ -72,24 +54,26 @@ const styles = {
         paddingRight: 23,
         fontSize: 24,
         fontWeight: 500,
-        verticalAlign: "top",
-        lineHeight: "49px"
+        verticalAlign: "top"
     },
     h2: {
         fontSize: 14,
         fontWeight: 400,
-        lineHeight: "49px",
-        margin: 0
+        lineHeight: "28px"
+    },
+    wrap: {
+        display: "inline-block"
     }
 };
-var _Component;
-class Error extends (_Component = _react.default.Component) {
+class Error extends _react.default.Component {
     render() {
-        const { statusCode , withDarkMode =true  } = this.props;
+        const { statusCode, withDarkMode = true } = this.props;
         const title = this.props.title || statusCodes[statusCode] || "An unexpected error has occurred";
         return /*#__PURE__*/ _react.default.createElement("div", {
             style: styles.error
-        }, /*#__PURE__*/ _react.default.createElement(_head.default, null, /*#__PURE__*/ _react.default.createElement("title", null, statusCode ? `${statusCode}: ${title}` : "Application error: a client-side exception has occurred")), /*#__PURE__*/ _react.default.createElement("div", null, /*#__PURE__*/ _react.default.createElement("style", {
+        }, /*#__PURE__*/ _react.default.createElement(_head.default, null, /*#__PURE__*/ _react.default.createElement("title", null, statusCode ? statusCode + ": " + title : "Application error: a client-side exception has occurred")), /*#__PURE__*/ _react.default.createElement("div", {
+            style: styles.desc
+        }, /*#__PURE__*/ _react.default.createElement("style", {
             dangerouslySetInnerHTML: {
                 /* CSS minified from
                 body { margin: 0; color: #000; background: #fff; }
@@ -107,22 +91,27 @@ class Error extends (_Component = _react.default.Component) {
                 }`
                     : ''
                 }
-               */ __html: `body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}${withDarkMode ? "@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}" : ""}`
+               */ __html: "body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}" + (withDarkMode ? "@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}" : "")
             }
         }), statusCode ? /*#__PURE__*/ _react.default.createElement("h1", {
             className: "next-error-h1",
             style: styles.h1
         }, statusCode) : null, /*#__PURE__*/ _react.default.createElement("div", {
-            style: styles.desc
+            style: styles.wrap
         }, /*#__PURE__*/ _react.default.createElement("h2", {
             style: styles.h2
         }, this.props.title || statusCode ? title : /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, "Application error: a client-side exception has occurred (see the browser console for more information)"), "."))));
     }
 }
-Error.displayName = "ErrorPage";
-Error.getInitialProps = _getInitialProps;
-Error.origGetInitialProps = _getInitialProps;
-exports["default"] = Error;
+(()=>{
+    Error.displayName = "ErrorPage";
+})();
+(()=>{
+    Error.getInitialProps = _getInitialProps;
+})();
+(()=>{
+    Error.origGetInitialProps = _getInitialProps;
+})();
 if ((typeof exports.default === "function" || typeof exports.default === "object" && exports.default !== null) && typeof exports.default.__esModule === "undefined") {
     Object.defineProperty(exports.default, "__esModule", {
         value: true
@@ -174,6 +163,19 @@ module.exports = require("next/dist/shared/lib/utils/warn-once.js");
 
 module.exports = require("react");
 
+/***/ }),
+
+/***/ 167:
+/***/ ((__unused_webpack_module, exports) => {
+
+
+
+exports._ = exports._interop_require_default = _interop_require_default;
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : { default: obj };
+}
+
+
 /***/ })
 
 };
@@ -183,7 +185,7 @@ module.exports = require("react");
 var __webpack_require__ = require("../webpack-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [501], () => (__webpack_exec__(1360)));
+var __webpack_exports__ = __webpack_require__.X(0, [636], () => (__webpack_exec__(3499)));
 module.exports = __webpack_exports__;
 
 })();
